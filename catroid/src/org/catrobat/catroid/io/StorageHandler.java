@@ -35,7 +35,6 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.FileChecksumContainer;
 import org.catrobat.catroid.common.LookData;
-import org.catrobat.catroid.common.ProjectData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.BroadcastScript;
 import org.catrobat.catroid.content.Project;
@@ -481,18 +480,15 @@ public final class StorageHandler {
 		}
 	}
 
-	public boolean deleteProject(Project project) {
-		if (project != null) {
-			return UtilFile.deleteDirectory(new File(buildProjectPath(project.getName())));
+	public void deleteProject(String projectName) throws IllegalArgumentException, IOException {
+		boolean success = true;
+		if (projectName == null || !projectExists(projectName)) {
+			throw new IllegalArgumentException("Project with name " + projectName + " does not exist");
 		}
-		return false;
-	}
-
-	public boolean deleteProject(ProjectData projectData) {
-		if (projectData != null) {
-			return UtilFile.deleteDirectory(new File(buildProjectPath(projectData.projectName)));
+		success = UtilFile.deleteDirectory(new File(buildProjectPath(projectName)));
+		if (!success) {
+			throw new IOException("Error at deleting project " + projectName);
 		}
-		return false;
 	}
 
 	public boolean projectExists(String projectName) {
