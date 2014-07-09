@@ -78,9 +78,9 @@ public class UserVariableAdapter extends BaseAdapter implements ScriptActivityAd
 		this.checkboxId = R.id.fragment_formula_editor_variablelist_item_checkbox;
 		this.textViewId = R.id.fragment_formula_editor_variablelist_item_name_text_view;
 		this.textViewId2 = R.id.fragment_formula_editor_variablelist_item_value_text_view;
-		this.linearLayoutGlobalId = R.id.variablelist_global_headline;
-		this.linearLayoutLocalId = R.id.variablelist_local_headline;
 		this.linearLayoutUserBrickId = R.id.variablelist_userbrick_headline;
+		this.linearLayoutGlobalId = R.id.variablelist_and_userlist_global_headline;
+		this.linearLayoutLocalId = R.id.variablelist_and_userlist_local_headline;
 	}
 
 	public void setItemLayout(int itemLayout, int textViewId) {
