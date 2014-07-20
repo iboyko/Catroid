@@ -38,13 +38,13 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.bluetooth.BluetoothManager;
 import org.catrobat.catroid.bluetooth.DeviceListActivity;
 import org.catrobat.catroid.common.Constants;
+import org.catrobat.catroid.common.ToastManager;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.drone.DroneInitializer;
@@ -109,7 +109,7 @@ public class PreStageActivity extends BaseActivity {
 			int bluetoothState = bluetoothManager.activateBluetooth();
 			if (bluetoothState == BluetoothManager.BLUETOOTH_NOT_SUPPORTED) {
 
-				Toast.makeText(PreStageActivity.this, R.string.notification_blueth_err, Toast.LENGTH_LONG).show();
+				ToastManager.showError(PreStageActivity.this, R.string.notification_blueth_err);
 				resourceFailed();
 			} else if (bluetoothState == BluetoothManager.BLUETOOTH_ALREADY_ON) {
 				if (legoNXT == null) {
@@ -131,7 +131,7 @@ public class PreStageActivity extends BaseActivity {
 				requiredResourceCounter--;
 				LedUtil.activateLedThread();
 			} else {
-				Toast.makeText(PreStageActivity.this, R.string.no_flash_led_available, Toast.LENGTH_LONG).show();
+				ToastManager.showError(PreStageActivity.this, R.string.no_flash_led_available);
 				resourceFailed();
 			}
 		}
@@ -143,7 +143,7 @@ public class PreStageActivity extends BaseActivity {
 				VibratorUtil.setContext(this.getBaseContext());
 				VibratorUtil.activateVibratorThread();
 			} else {
-				Toast.makeText(PreStageActivity.this, R.string.no_vibrator_available, Toast.LENGTH_LONG).show();
+				ToastManager.showError(PreStageActivity.this, R.string.no_vibrator_available);
 				resourceFailed();
 			}
 		}
@@ -312,8 +312,7 @@ public class PreStageActivity extends BaseActivity {
 						startBluetoothCommunication(true);
 						break;
 					case Activity.RESULT_CANCELED:
-						Toast.makeText(PreStageActivity.this, R.string.notification_blueth_err, Toast.LENGTH_LONG)
-								.show();
+						ToastManager.showError(PreStageActivity.this, R.string.notification_blueth_err);
 						resourceFailed();
 						break;
 				}
@@ -330,7 +329,7 @@ public class PreStageActivity extends BaseActivity {
 
 					case Activity.RESULT_CANCELED:
 						connectingProgressDialog.dismiss();
-						Toast.makeText(PreStageActivity.this, R.string.bt_connection_failed, Toast.LENGTH_LONG).show();
+						ToastManager.showError(PreStageActivity.this, R.string.notification_blueth_err);
 						resourceFailed();
 						break;
 				}
@@ -345,9 +344,7 @@ public class PreStageActivity extends BaseActivity {
 							textToSpeech.setOnUtteranceCompletedListener(onUtteranceCompletedListenerContainer);
 							resourceInitialized();
 							if (status == TextToSpeech.ERROR) {
-								Toast.makeText(PreStageActivity.this,
-										"Error occurred while initializing Text-To-Speech engine", Toast.LENGTH_LONG)
-										.show();
+								ToastManager.showError(PreStageActivity.this, "Error occurred while initializing Text-To-Speech engine");
 								resourceFailed();
 							}
 						}
@@ -416,7 +413,7 @@ public class PreStageActivity extends BaseActivity {
 					resourceInitialized();
 					break;
 				case LegoNXTBtCommunicator.STATE_CONNECTERROR:
-					Toast.makeText(PreStageActivity.this, R.string.bt_connection_failed, Toast.LENGTH_SHORT).show();
+					ToastManager.showError(PreStageActivity.this, R.string.bt_connection_failed);
 					connectingProgressDialog.dismiss();
 					legoNXT.destroyCommunicator();
 					legoNXT = null;

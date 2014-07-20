@@ -416,10 +416,10 @@ public class FormulaEditorEditTextTest extends BaseActivityInstrumentationTestCa
 		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
 
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		solo.clickOnView(solo.getView(R.id.formula_editor_edit_field_clear));
 		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_plus));
 		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
 
-		solo.sleep(50);
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 		solo.clickOnView(solo.getView(R.id.formula_editor_edit_field_clear));
 		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_1));
