@@ -242,17 +242,18 @@ public final class ProjectManager implements OnLoadProjectCompleteListener, OnCh
 		this.project = project;
 	}
 
-    @Deprecated
-    public void deleteCurrentProject() throws IOException {
-        deleteProject(project.getName());
-    }
+	@Deprecated
+	public void deleteCurrentProject() throws IllegalArgumentException, IOException {
+		deleteProject(project.getName());
+	}
 
-    public void deleteProject(String projectName) throws IllegalArgumentException, IOException {
-        StorageHandler.getInstance().deleteProject(projectName);
-        if (project != null && project.getName() == projectName) {
-            project = null;
-        }
-    }
+	public void deleteProject(String projectName) throws IllegalArgumentException, IOException {
+		StorageHandler.getInstance().deleteProject(projectName);
+
+		if (project != null && project.getName().equals(projectName)) {
+			project = null;
+		}
+	}
 
 	public boolean renameProject(String newProjectName, Context context) {
 		if (StorageHandler.getInstance().projectExists(newProjectName)) {
@@ -360,15 +361,6 @@ public final class ProjectManager implements OnLoadProjectCompleteListener, OnCh
 		this.fileChecksumContainer = fileChecksumContainer;
 	}
 
-	private class SaveProjectAsynchronousTask extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			StorageHandler.getInstance().saveProject(project);
-			return null;
-		}
-	}
-
 	@Override
 	public void onTokenNotValid(FragmentActivity fragmentActivity) {
 		showLoginRegisterDialog(fragmentActivity);
@@ -473,6 +465,15 @@ public final class ProjectManager implements OnLoadProjectCompleteListener, OnCh
 				((IfLogicEndBrick) currentBrick).setIfElseBrick(elseBrick);
 				ifBeginList.remove(ifBeginBrick);
 			}
+		}
+	}
+
+	private class SaveProjectAsynchronousTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			StorageHandler.getInstance().saveProject(project);
+			return null;
 		}
 	}
 }
