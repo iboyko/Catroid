@@ -100,6 +100,9 @@ public final class UtilFile {
 		if (fileOrDirectory == null) {
 			return false;
 		}
+
+		Log.d(TAG, "delete: " + fileOrDirectory.getName());
+
 		boolean success = true;
 		if (fileOrDirectory.isDirectory()) {
 			for (File child : fileOrDirectory.listFiles()) {
