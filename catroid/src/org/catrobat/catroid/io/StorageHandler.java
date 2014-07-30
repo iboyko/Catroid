@@ -333,9 +333,14 @@ public final class StorageHandler {
 	public boolean saveProject(Project project) {
 		BufferedWriter writer = null;
 
+		Log.d(TAG, "Trigger saveProject " + project.getName());
+
 		if (project == null) {
+			Log.d(TAG, "project is null !!!!");
 			return false;
 		}
+
+		// SystemClock.sleep(8000);
 
 		Log.d(TAG, "saveProject " + project.getName());
 
@@ -348,6 +353,9 @@ public final class StorageHandler {
 		File currentCodeFile = null;
 
 		try {
+
+			if(new File(buildProjectPath(project.getName())).exists() == false)
+				Log.d(TAG, "directory does not exist!");
 
 			projectXml = XML_HEADER.concat(xstream.toXML(project));
 			tmpCodeFile = new File(buildProjectPath(project.getName()), PROJECTCODE_NAME_TMP);
