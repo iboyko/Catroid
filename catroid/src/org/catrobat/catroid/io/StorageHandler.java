@@ -348,8 +348,9 @@ public final class StorageHandler {
 
 		try {
 
-			if (new File(buildProjectPath(project.getName())).exists() == false)
+			if (new File(buildProjectPath(project.getName())).exists() == false) {
 				Log.d(TAG, "directory does not exist!");
+			}
 
 			projectXml = XML_HEADER.concat(xstream.toXML(project));
 			tmpCodeFile = new File(buildProjectPath(project.getName()), PROJECTCODE_NAME_TMP);
