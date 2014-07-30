@@ -69,7 +69,6 @@ public class LoopBrickTest extends BaseActivityInstrumentationTestCase<MainMenuA
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
 		super.tearDown();
-		ProjectManager.getInstance().deleteCurrentProject();
 	}
 
 	public void testRepeatBrick() {

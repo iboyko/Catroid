@@ -71,7 +71,6 @@ public class StageDialogTest extends BaseActivityInstrumentationTestCase<MainMen
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
 		super.tearDown();
-		ProjectManager.getInstance().deleteCurrentProject();
 	}
 
 	public void testBackButtonPressedTwice() {
