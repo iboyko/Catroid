@@ -90,8 +90,8 @@ public class SpeakStageTest extends BaseActivityInstrumentationTestCase<ProjectA
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		deleteSpeechFiles();
+		super.tearDown();
 	}
 
 	private void deleteSpeechFiles() {

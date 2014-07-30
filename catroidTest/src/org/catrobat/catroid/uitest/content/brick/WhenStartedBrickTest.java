@@ -56,8 +56,8 @@ public class WhenStartedBrickTest extends BaseActivityInstrumentationTestCase<Ma
 	public void tearDown() throws Exception {
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
+		super.tearDown();
 	}
 
 	public void testWhenStartedBrick() {

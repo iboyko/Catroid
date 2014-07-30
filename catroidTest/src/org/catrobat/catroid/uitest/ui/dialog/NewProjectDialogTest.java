@@ -73,8 +73,8 @@ public class NewProjectDialogTest extends BaseActivityInstrumentationTestCase<Ma
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(testingProjectJustTwoDots)));
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
+		super.tearDown();
 	}
 
 	public void testNewProjectDialog() {

@@ -47,8 +47,8 @@ public class SetDescriptionDialogTest extends BaseActivityInstrumentationTestCas
 	protected void tearDown() throws Exception {
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
+		super.tearDown();
 	}
 
 	// Not testable with Android 2.3, because solo is not able to enter new lines
