@@ -69,13 +69,6 @@ public class DeleteDialogTest extends BaseActivityInstrumentationTestCase<MainMe
 		lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookDataList();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		// normally super.teardown should be called last
-		// but tests crashed with Nullpointer
-		super.tearDown();
-	}
-
 	public void testDeleteLooks() throws Exception {
 		addLooksToProject();
 		String buttonOkText = solo.getString(R.string.yes);

@@ -42,13 +42,6 @@ public class SetDescriptionDialogTest extends BaseActivityInstrumentationTestCas
 		super(MainMenuActivity.class);
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		// normally super.teardown should be called last
-		// but tests crashed with Nullpointer
-		super.tearDown();
-	}
-
 	// Not testable with Android 2.3, because solo is not able to enter new lines
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public void testMultiLineProjectDescription() {
