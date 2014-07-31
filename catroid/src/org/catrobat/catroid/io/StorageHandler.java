@@ -327,8 +327,6 @@ public final class StorageHandler {
 	public boolean saveProject(Project project) {
 		BufferedWriter writer = null;
 
-		Log.d(TAG, "Trigger saveProject " + project.getName());
-
 		if (project == null) {
 			Log.d(TAG, "project is null !!!!");
 			return false;
