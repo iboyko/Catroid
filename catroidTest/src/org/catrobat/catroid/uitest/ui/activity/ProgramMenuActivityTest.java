@@ -43,6 +43,7 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.ChangeXByNBrick;
 import org.catrobat.catroid.content.bricks.SetXBrick;
 import org.catrobat.catroid.content.bricks.SetYBrick;
+import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ProgramMenuActivity;
@@ -77,7 +78,9 @@ public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase
 
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		super.tearDown();
 	}
 

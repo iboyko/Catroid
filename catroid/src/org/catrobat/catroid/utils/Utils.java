@@ -433,7 +433,9 @@ public final class Utils {
 			int start = standardProjectXMLString.indexOf("<objectList>");
 			int end = standardProjectXMLString.indexOf("</objectList>");
 			String standardProjectSpriteList = standardProjectXMLString.substring(start, end);
-			ProjectManager.getInstance().deleteCurrentProject();
+			if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+				ProjectManager.getInstance().deleteCurrentProject();
+			}
 
 			ProjectManager.getInstance().setProject(projectToCheck);
 			ProjectManager.getInstance().saveProject();

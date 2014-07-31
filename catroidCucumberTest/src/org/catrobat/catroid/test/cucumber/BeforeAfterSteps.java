@@ -34,6 +34,7 @@ import cucumber.api.java.Before;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.MainMenuActivity;
 
 // CHECKSTYLE DISABLE MethodNameCheck FOR 1000 LINES
@@ -64,6 +65,8 @@ public class BeforeAfterSteps extends ActivityInstrumentationTestCase2<MainMenuA
 	public void after() {
 		Log.d(CucumberInstrumentation.TAG, "after step");
 		solo.finishOpenedActivities();
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 	}
 }

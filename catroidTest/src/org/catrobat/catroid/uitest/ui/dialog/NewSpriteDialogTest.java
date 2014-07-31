@@ -30,6 +30,7 @@ import android.widget.EditText;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
+import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.controller.LookController;
@@ -65,7 +66,9 @@ public class NewSpriteDialogTest extends BaseActivityInstrumentationTestCase<Mai
 
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		super.tearDown();
 	}
 

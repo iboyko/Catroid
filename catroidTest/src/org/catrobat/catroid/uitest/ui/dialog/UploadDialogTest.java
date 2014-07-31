@@ -79,7 +79,9 @@ public class UploadDialogTest extends BaseActivityInstrumentationTestCase<MainMe
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		uploadProject = null;
 		super.tearDown();
 	}

@@ -484,7 +484,9 @@ public class ProjectUpAndDownloadTest extends BaseActivityInstrumentationTestCas
 		try {
 			if (StorageHandler.getInstance().projectExists(standardProjectName)) {
 				ProjectManager.getInstance().loadProject(standardProjectName, getActivity());
-				ProjectManager.getInstance().deleteCurrentProject();
+				if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+					ProjectManager.getInstance().deleteCurrentProject();
+				}
 			}
 			standardProject = StandardProjectHandler.createAndSaveStandardProject(standardProjectName,
 					getInstrumentation().getTargetContext());

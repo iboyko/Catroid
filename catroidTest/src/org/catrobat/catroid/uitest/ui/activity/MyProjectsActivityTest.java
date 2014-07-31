@@ -140,7 +140,9 @@ public class MyProjectsActivityTest extends BaseActivityInstrumentationTestCase<
 
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		if (unzip) {
 			unzipProjects();
 		}

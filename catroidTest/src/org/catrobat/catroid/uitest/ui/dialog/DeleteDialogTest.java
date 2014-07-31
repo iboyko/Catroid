@@ -29,6 +29,7 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.common.SoundInfo;
+import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.fragment.LookFragment;
@@ -73,7 +74,9 @@ public class DeleteDialogTest extends BaseActivityInstrumentationTestCase<MainMe
 	protected void tearDown() throws Exception {
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		super.tearDown();
 	}
 

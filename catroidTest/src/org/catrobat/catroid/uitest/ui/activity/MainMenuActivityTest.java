@@ -91,7 +91,9 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(projectNameJustTwoDots)));
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		super.tearDown();
 	}
 

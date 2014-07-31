@@ -54,7 +54,9 @@ public class RenameSpriteDialogTest extends BaseActivityInstrumentationTestCase<
 	public void tearDown() throws Exception {
 		// normally super.teardown should be called last
 		// but tests crashed with Nullpointer
-		ProjectManager.getInstance().deleteCurrentProject();
+		if(StorageHandler.getInstance().projectExists(ProjectManager.getInstance().getCurrentProject().getName())) {
+			ProjectManager.getInstance().deleteCurrentProject();
+		}
 		super.tearDown();
 	}
 
