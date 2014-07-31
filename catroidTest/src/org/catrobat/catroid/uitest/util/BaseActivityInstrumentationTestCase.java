@@ -69,7 +69,7 @@ public abstract class BaseActivityInstrumentationTestCase<T extends Activity> ex
 		edit.remove(Constants.PREF_PROJECTNAME_KEY);
 		edit.commit();
 
-		// solo.finishOpenedActivities();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 		solo = null;
