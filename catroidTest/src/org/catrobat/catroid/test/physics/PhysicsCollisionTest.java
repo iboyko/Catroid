@@ -52,13 +52,13 @@ public class PhysicsCollisionTest extends PhysicsActionTestCase {
 
 		@Override
 		public boolean handle (Event event) {
-			boolean returnValue = super.handle(event);
 			try {
 				test.registerCollision((PhysicsLook)event.getTarget());
+				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
+				return false;
 			}
-			return returnValue;
 		}
 	}
 
