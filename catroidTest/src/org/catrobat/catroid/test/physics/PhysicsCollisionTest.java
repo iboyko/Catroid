@@ -22,29 +22,66 @@
  */
 package org.catrobat.catroid.test.physics;
 
-import android.util.Log;
-
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
 
 import org.catrobat.catroid.ProjectManager;
+import org.catrobat.catroid.content.BroadcastListener;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.physics.PhysicsLook;
 import org.catrobat.catroid.physics.PhysicsObject;
 import org.catrobat.catroid.test.physics.actions.PhysicsActionTestCase;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PhysicsCollisionTest extends PhysicsActionTestCase {
 
 	private static final String TAG = PhysicsCollisionTest.class.getSimpleName();
 	private Sprite sprite2;
+	private boolean collision = false;
+	private PhysicsLook[] collisionLooks = new PhysicsLook[2];
+
+	private class MockBroadcastListener extends BroadcastListener {
+
+		PhysicsCollisionTest test;
+
+		MockBroadcastListener(PhysicsCollisionTest test) {
+			this.test = test;
+		}
+
+		@Override
+		public boolean handle (Event event) {
+			boolean returnValue = super.handle(event);
+			try {
+				test.registerCollision((PhysicsLook)event.getTarget());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return returnValue;
+		}
+	}
+
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+
 		ProjectManager.getInstance().getCurrentProject().addSprite(sprite);
 		sprite2 = sprite.clone();
 		sprite2.look = new PhysicsLook(sprite2, physicsWorld);
 		sprite2.look.setLookData(sprite.look.getLookData());
+		ProjectManager.getInstance().getCurrentProject().addSprite(sprite2);
 		physicsWorld.setGravity(0f, 0f);
+
+		MockBroadcastListener listener = new MockBroadcastListener(this);
+		sprite.look.addListener(listener);
+		sprite2.look.addListener(listener);
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+//		resetCollisionData();
 	}
 
 	public void testCollisionDynamicOnly() {
@@ -60,7 +97,6 @@ public class PhysicsCollisionTest extends PhysicsActionTestCase {
 		physicsObject1.getBoundaryBox(spriteAABBPoint1, spriteAABBPoint2);
 
 		float spriteDistance = 256f;
-		// set positions of sprites so that distance between their AxisAlignedBoundingBox-Edges is spriteDistance
 		sprite.look.setPosition(spriteAABBPoint1.x - spriteDistance/2, 0f);
 		sprite2.look.setPosition(spriteAABBPoint2.x + spriteDistance/2, 0f);
 
@@ -70,10 +106,18 @@ public class PhysicsCollisionTest extends PhysicsActionTestCase {
 
 		for (int i = 0; i < 12; i++) {
 			physicsWorld.step(0.5f);
+
+			if (collision) {
+				List<PhysicsLook> collisionLookList = Arrays.asList(collisionLooks);
+				if (sprite.look != sprite2.look && collisionLookList.contains(sprite.look) && collisionLookList.contains(sprite2.look)) {
+					break;
+				} else {
+					resetCollisionData();
+				}
+			}
 		}
 
-		assertTrue("physicsObjects do not seem to have collided ", physicsObject1.getVelocity().x < 0
-				&& physicsObject2.getVelocity().x > 0);
+		assertTrue("physicsObjects do not seem to have collided ", collision);
 	}
 
 	public void testCollisionDynamicStatic() {
@@ -97,9 +141,31 @@ public class PhysicsCollisionTest extends PhysicsActionTestCase {
 
 		for (int i = 0; i < 12; i++) {
 			physicsWorld.step(0.5f);
+
+			if (collision) {
+				List<PhysicsLook> collisionLookList = Arrays.asList(collisionLooks);
+				if (sprite.look != sprite2.look && collisionLookList.contains(sprite.look) && collisionLookList.contains(sprite2.look)) {
+					break;
+				} else {
+					resetCollisionData();
+				}
+			}
 		}
 
-		assertTrue("physicsObjects do not seem to have collided ", physicsObject1.getVelocity().x < 0);
+		assertTrue("physicsObjects do not seem to have collided ", collision);
 	}
 
+	public void registerCollision(PhysicsLook collisionLook) {
+		if (collisionLooks[0] == null) {
+			collisionLooks[0] = collisionLook;
+		} else if (collisionLooks[0] != collisionLook && !collision) {
+			collisionLooks[1] = collisionLook;
+			collision = true;
+		}
+	}
+
+	private void resetCollisionData() {
+		collision = false;
+		collisionLooks = new PhysicsLook[2];
+	}
 }
