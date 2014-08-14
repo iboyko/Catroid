@@ -127,8 +127,6 @@ public class CategoryBricksFactory {
 			tempList = setupSoundCategoryList();
 		} else if (category.equals(context.getString(R.string.category_looks))) {
 			tempList = setupLooksCategoryList();
-		} else if (category.equals(context.getString(R.string.category_variables))) {
-			tempList = setupVariablesCategoryList();
 		} else if (category.equals(context.getString(R.string.category_user_bricks))) {
 			tempList = setupUserBricksCategoryList();
 		} else if (category.equals(context.getString(R.string.category_data))) {
@@ -277,8 +275,8 @@ public class CategoryBricksFactory {
 
 	private List<Brick> setupDataCategoryList(Sprite sprite) {
 		List<Brick> dataBrickList = new ArrayList<Brick>();
-		dataBrickList.add(new SetVariableBrick(sprite, 0));
-		dataBrickList.add(new ChangeVariableBrick(sprite, 0));
+		dataBrickList.add(new SetVariableBrick(0));
+		dataBrickList.add(new ChangeVariableBrick(0));
 		dataBrickList.add(new AddItemToUserListBrick(sprite, 0));
 		dataBrickList.add(new DeleteItemOfUserListBrick(sprite, 1));
 		dataBrickList.add(new InsertItemIntoUserListBrick(sprite, 0, 1));

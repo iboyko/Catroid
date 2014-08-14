@@ -32,8 +32,6 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrickElements;
 import org.catrobat.catroid.ui.adapter.DataAdapter;
-import org.catrobat.catroid.ui.adapter.UserListAdapter;
-import org.catrobat.catroid.ui.adapter.UserVariableAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -71,12 +69,11 @@ public class DataContainer implements Serializable {
 
 	}
 
-	public UserListAdapter createUserListAdapter(Context context, Sprite sprite) {
-		return new UserListAdapter(context, getOrCreateUserListListForSprite(sprite), projectLists);
+	public DataAdapter createDataAdapter(Context context, Sprite sprite) {
+		return new DataAdapter(context, getOrCreateUserListListForSprite(sprite), projectLists);
 	}
 
-	public UserVariableAdapter createUserVariableAdapter(Context context, int userBrickId, Sprite sprite, boolean inUserBrick)
-	{
+	public DataAdapter createDataAdapter(Context context, int userBrickId, Sprite sprite, boolean inUserBrick) {
 		List<UserVariable> userBrickVariables;
 		if (userBrickId == INVALID_ID || !inUserBrick) {
 			userBrickVariables = new LinkedList<UserVariable>();
@@ -84,11 +81,7 @@ public class DataContainer implements Serializable {
 			userBrickVariables = getOrCreateVariableListForUserBrick(userBrickId);
 		}
 		List<UserVariable> spriteVariables = getOrCreateVariableListForSprite(sprite);
-		return new UserVariableAdapter(context, userBrickVariables, spriteVariables, projectVariables);
-	}
-
-	public DataAdapter createDataAdapter(Context context, Sprite sprite) {
-		return new DataAdapter(context, getOrCreateUserListListForSprite(sprite), projectLists, getOrCreateVariableListForSprite(sprite), projectVariables);
+		return new DataAdapter(context, userBrickVariables, spriteVariables, getOrCreateVariableListForSprite(sprite), projectVariables);
 	}
 
 	public UserVariable getUserVariable(String userVariableName, Sprite sprite) {
