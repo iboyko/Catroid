@@ -36,7 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends InstrumentationTestCase {
+public class XStreamToSupportCatrobatLanguageVersion092AndBeforeTest extends InstrumentationTestCase {
 
 	private static final String TAG = "XStreamTest";
 
@@ -47,6 +47,7 @@ public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends Ins
 	private static final String ZIP_FILENAME_AIR_FIGHT = "Air_fight_0.5.catrobat";
 	private static final String ZIP_FILENAME_XRAY_PHONE = "X-Ray_phone.catrobat";
 	private static final String ZIP_FILENAME_ALL_BRICKS = "All_Bricks.catrobat";
+	private static final String ZIP_FILENAME_EMPTY_PROJECT = "languageVersion.catrobat";
 
 
 	private static final String PROJECT_NAME_FALLING_BALLS = "Falling Balls";
@@ -56,6 +57,8 @@ public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends Ins
 	private static final String PROJECT_NAME_AIR_FIGHT = "Air Fight 0.5";
 	private static final String PROJECT_NAME_XRAY_PHONE = "X-Ray Phone";
 	private static final String PROJECT_NAME_ALL_BRICKS = "All Bricks";
+	private static final String PROJECT_NAME_EMPTY_PROJECT = "languageVersion";
+
 
 	@Override
 	public void setUp() {
@@ -66,6 +69,7 @@ public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends Ins
 		copyAssetProjectZipFile(ZIP_FILENAME_AIR_FIGHT, Constants.TMP_PATH);
 		copyAssetProjectZipFile(ZIP_FILENAME_XRAY_PHONE, Constants.TMP_PATH);
 		copyAssetProjectZipFile(ZIP_FILENAME_ALL_BRICKS, Constants.TMP_PATH);
+		copyAssetProjectZipFile(ZIP_FILENAME_EMPTY_PROJECT, Constants.TMP_PATH);
 
 		UtilZip.unZipFile(Constants.TMP_PATH + "/" + ZIP_FILENAME_FALLING_BALLS, Constants.DEFAULT_ROOT + "/"
 				+ PROJECT_NAME_FALLING_BALLS);
@@ -81,21 +85,24 @@ public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends Ins
 				+ PROJECT_NAME_XRAY_PHONE);
 		UtilZip.unZipFile(Constants.TMP_PATH + "/" + ZIP_FILENAME_ALL_BRICKS, Constants.DEFAULT_ROOT + "/"
 				+ PROJECT_NAME_ALL_BRICKS);
+		UtilZip.unZipFile(Constants.TMP_PATH + "/" + ZIP_FILENAME_EMPTY_PROJECT, Constants.DEFAULT_ROOT + "/"
+				+ PROJECT_NAME_EMPTY_PROJECT);
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_FALLING_BALLS, Constants.TMP_PATH);
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_COLOR_LEANER_BALLOONS, Constants.TMP_PATH);
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_PONG_STARTER, Constants.TMP_PATH);
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_WHIP, Constants.TMP_PATH);
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_AIR_FIGHT, Constants.TMP_PATH);
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_XRAY_PHONE, Constants.TMP_PATH);
-		deleteZipFilesOfCatrobatLanguageVersion091AndBefore(ZIP_FILENAME_ALL_BRICKS, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_FALLING_BALLS, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_COLOR_LEANER_BALLOONS, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_PONG_STARTER, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_WHIP, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_AIR_FIGHT, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_XRAY_PHONE, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_ALL_BRICKS, Constants.TMP_PATH);
+		deleteZipFilesOfCatrobatLanguageVersion092AndBefore(ZIP_FILENAME_EMPTY_PROJECT, Constants.TMP_PATH);
 
 		TestUtils.deleteTestProjects(new String[] { PROJECT_NAME_FALLING_BALLS, PROJECT_NAME_COLOR_LEANER_BALLOONS,
 				PROJECT_NAME_PONG_STARTER, PROJECT_NAME_WHIP, PROJECT_NAME_AIR_FIGHT, PROJECT_NAME_XRAY_PHONE,
-				PROJECT_NAME_ALL_BRICKS});
+				PROJECT_NAME_ALL_BRICKS, PROJECT_NAME_EMPTY_PROJECT});
 		super.tearDown();
 	}
 
@@ -130,7 +137,7 @@ public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends Ins
 		}
 	}
 
-	private void deleteZipFilesOfCatrobatLanguageVersion091AndBefore(String fileName, String destinationFolder) {
+	private void deleteZipFilesOfCatrobatLanguageVersion092AndBefore(String fileName, String destinationFolder) {
 		File fileToBeDeleted = new File(destinationFolder, fileName);
 		if (fileToBeDeleted.exists()) {
 			fileToBeDeleted.delete();
@@ -163,6 +170,11 @@ public class XStreamToSupportCatrobatLanguageVersion091AndBeforeTest extends Ins
 
 		Project allBricksProject = StorageHandler.getInstance().loadProject(PROJECT_NAME_ALL_BRICKS);
 		assertTrue("Cannot load All Bricks project", allBricksProject != null);
+	}
+
+	public void testLoadingProjectsOfCatrobatLanguageVersion092() {
+		Project emptyProject = StorageHandler.getInstance().loadProject(PROJECT_NAME_EMPTY_PROJECT);
+		assertTrue("Cannot load empty project", emptyProject == null);
 	}
 
 }
