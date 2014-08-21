@@ -41,27 +41,27 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 
-public class NewStringDialog extends SherlockDialogFragment {
+public class NewAbcDialog extends SherlockDialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_new_string";
-	private EditText newStringEditText;
-	private Dialog newStringDialog;
+	public static final String DIALOG_FRAGMENT_TAG = NewAbcDialog.class.getSimpleName();
+	private EditText newAbcEditText;
+	private Dialog newAbcDialog;
 
-	public NewStringDialog() {
+	public NewAbcDialog() {
 	}
 
-	public static NewStringDialog newInstance(){
-		return new NewStringDialog();
+	public static NewAbcDialog newInstance(){
+		return new NewAbcDialog();
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle bundle) {
 		final ViewGroup root = (ViewGroup) getSherlockActivity().getSupportFragmentManager().findFragmentByTag(
 				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG).getView().getRootView();
-		final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_formulaeditor_string, root, false);
+		final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_formulaeditor_abc, root, false);
 
-		newStringDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.formula_editor_new_string_name)
+		newAbcDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+				.setTitle(R.string.formula_editor_new_abc_name)
 				.setNegativeButton(R.string.cancel_button, new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -73,23 +73,23 @@ public class NewStringDialog extends SherlockDialogFragment {
 						handleOkButton();
 					}
 				}).create();
-		newStringEditText = (EditText) dialogView.findViewById(R.id.formula_editor_string_name_edittext);
-		newStringDialog.setCanceledOnTouchOutside(true);
-		newStringDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		newAbcEditText = (EditText) dialogView.findViewById(R.id.formula_editor_abc_name_edit_text);
+		newAbcDialog.setCanceledOnTouchOutside(true);
+		newAbcDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		newStringDialog.setOnShowListener(new OnShowListener() {
+		newAbcDialog.setOnShowListener(new OnShowListener() {
 			@Override
 			public void onShow(DialogInterface dialog) {
 				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
 						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(newStringEditText, InputMethodManager.SHOW_IMPLICIT);
+				inputManager.showSoftInput(newAbcEditText, InputMethodManager.SHOW_IMPLICIT);
 			}
 		});
-		return newStringDialog;
+		return newAbcDialog;
 	}
 
 	private void handleOkButton() {
-		String stringName = newStringEditText.getText().toString();
+		String stringName = newAbcEditText.getText().toString();
 
 		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getSherlockActivity().getSupportFragmentManager()
 				.findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
@@ -97,7 +97,5 @@ public class NewStringDialog extends SherlockDialogFragment {
 			formulaEditor.addStringToActiveFormula(stringName);
 			formulaEditor.updateButtonViewOnKeyboard();
 		}
-
 	}
-
 }

@@ -62,7 +62,7 @@ import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
 import org.catrobat.catroid.ui.dialogs.FormulaEditorComputeDialog;
-import org.catrobat.catroid.ui.dialogs.NewStringDialog;
+import org.catrobat.catroid.ui.dialogs.NewAbcDialog;
 
 public class FormulaEditorFragment extends SherlockFragment implements OnKeyListener,
 		ViewTreeObserver.OnGlobalLayoutListener {
@@ -285,18 +285,18 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 						case R.id.formula_editor_keyboard_ok:
 							endFormulaEditor();
 							return true;
-						case R.id.formula_editor_keyboard_string:
+						case R.id.formula_editor_keyboard_abc:
 							FragmentManager fragmentManager = ((SherlockFragmentActivity) context)
 									.getSupportFragmentManager();
 							Fragment dialogFragment = fragmentManager
-									.findFragmentByTag(NewStringDialog.DIALOG_FRAGMENT_TAG);
+									.findFragmentByTag(NewAbcDialog.DIALOG_FRAGMENT_TAG);
 
 							if (dialogFragment == null) {
-								dialogFragment = NewStringDialog.newInstance();
+								dialogFragment = NewAbcDialog.newInstance();
 							}
 
-							((NewStringDialog) dialogFragment).show(fragmentManager,
-									NewStringDialog.DIALOG_FRAGMENT_TAG);
+							((NewAbcDialog) dialogFragment).show(fragmentManager,
+									NewAbcDialog.DIALOG_FRAGMENT_TAG);
 							return true;
 						default:
 							formulaEditorEditText.handleKeyEvent(view.getId(), "");
@@ -556,7 +556,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	}
 
 	public void addStringToActiveFormula(String string) {
-		formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_string, string);
+		formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_abc, string);
 	}
 
 	private class VariableDeletedReceiver extends BroadcastReceiver {

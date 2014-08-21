@@ -224,10 +224,10 @@
             android:text="@string/formula_editor_bracket_close" />
 
         <Button
-            android:id="@+id/formula_editor_keyboard_string"
+            android:id="@+id/formula_editor_keyboard_abc"
             style="@style/FormulaEditorButton"
             android:layout_weight="0.35"
-            android:text="@string/formula_editor_string" />
+            android:text="@string/formula_editor_abc" />
 
         <Button
             android:id="@+id/formula_editor_keyboard_variables"

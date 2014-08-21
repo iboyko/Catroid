@@ -366,7 +366,7 @@ public final class UiTestUtils {
 	}
 
 	public static void insertStringIntoEditText(Solo solo, String newValue) {
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_string));
+		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_abc));
 		UiTestUtils.clickEnterClose(solo, 0, newValue);
 	}
 
