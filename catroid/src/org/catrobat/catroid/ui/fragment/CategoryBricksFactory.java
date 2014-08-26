@@ -130,7 +130,7 @@ public class CategoryBricksFactory {
 		} else if (category.equals(context.getString(R.string.category_user_bricks))) {
 			tempList = setupUserBricksCategoryList();
 		} else if (category.equals(context.getString(R.string.category_data))) {
-			tempList =  setupDataCategoryList(sprite);
+			tempList =  setupDataCategoryList();
 		} else if (category.equals(context.getString(R.string.category_lego_nxt))) {
 			tempList = setupLegoNxtCategoryList();
 		} else if (category.equals(context.getString(R.string.category_drone))) {
@@ -274,7 +274,7 @@ public class CategoryBricksFactory {
 		return looksBrickList;
 	}
 
-	private List<Brick> setupDataCategoryList(Sprite sprite) {
+	private List<Brick> setupDataCategoryList() {
 		List<Brick> dataBrickList = new ArrayList<Brick>();
 		dataBrickList.add(new SetVariableBrick(0));
 		dataBrickList.add(new ChangeVariableBrick(0));
