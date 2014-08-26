@@ -417,7 +417,7 @@ public final class UiTestUtils {
 
 	public static void createUserVariableFromDataFragment(Solo solo, String variableName, boolean forAllSprites) {
 		assertTrue("FormulaEditorDataFragment not shown: ",
-				solo.waitForFragmentByTag(FormulaEditorDataFragment.DATA_TAG));
+				solo.waitForFragmentByTag(FormulaEditorDataFragment.USER_DATA_TAG));
 
 		solo.clickOnView(solo.getView(R.id.button_add));
 		assertTrue("Add Data Dialog not shown",
@@ -438,7 +438,7 @@ public final class UiTestUtils {
 
 	public static void createUserListFromDataFragment(Solo solo, String userListName, boolean forAllSprites) {
 		assertTrue("FormulaEditorDataFragment not shown: ",
-				solo.waitForFragmentByTag(FormulaEditorDataFragment.DATA_TAG));
+				solo.waitForFragmentByTag(FormulaEditorDataFragment.USER_DATA_TAG));
 
 		solo.clickOnView(solo.getView(R.id.button_add));
 		assertTrue("Add Data Dialog not shown",
