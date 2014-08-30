@@ -36,6 +36,8 @@
 
     <include layout="@layout/fragment_formula_editor_data_local_headline" />
 
+    <include layout="@layout/fragment_formula_editor_variablelist_userbrick_headline" />
+
 
     <LinearLayout
         android:id="@+id/fragment_formula_editor_data_list_item_layout"

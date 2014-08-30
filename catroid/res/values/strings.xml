@@ -73,7 +73,11 @@
     <string name="preference_description_mindstorm_bricks">Allow to control Lego Mindstorms robots</string>
 	<string name="preference_title_enable_quadcopter_bricks">ARDrone 2.0 bricks</string>
     <string name="preference_description_quadcopter_bricks">Allow to control the ARDrone 2.0 quadcopter</string>    
-    <!--  -->
+    <string name="preference_title_use_face_detection">Face Detection</string>
+    <string name="preference_description_use_face_detection">Allow to detect faces</string>
+    <string name="preference_title_select_camera">Choose Camera</string>
+    <string name="preference_description_select_camera">Select camera which is used for face detection</string>
+    <!-- -->
 
 
     <!-- New Object Dialog -->
@@ -237,6 +241,7 @@
     <string name="text_to_speech_engine_not_installed">Text-to-Speech engine not installed!\nDo you want to install it?</string>
     <string name="no_flash_led_available">No flash LED available</string>
     <string name="no_vibrator_available">Vibrator not available</string>
+    <string name="led_and_front_camera_warning">Led AND Front Camera are not supported</string>
     <!--  -->
 
 
@@ -692,6 +697,11 @@
     <string name="formula_editor_fragment_data_current_items" >current items</string >
     <string name="formula_editor_data_dialog_is_list" >is List</string >
     <string name="formula_editor_lists" >Lists</string >
+    <string name="formula_editor_variable_dialog_for_this_brick">For this brick</string>
+    <string name="formula_editor_sensor_face_detected">is_face_detected</string>
+    <string name="formula_editor_sensor_face_size">face_size</string>
+    <string name="formula_editor_sensor_face_x_position">face_x_position</string>
+    <string name="formula_editor_sensor_face_y_position">face_y_position</string>
 
     <plurals name="formula_editor_data_fragment_context_action_item_selected" >
         <item quantity="one">Item selected!</item>
