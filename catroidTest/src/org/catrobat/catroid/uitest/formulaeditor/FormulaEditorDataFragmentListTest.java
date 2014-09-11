@@ -147,7 +147,7 @@ public class FormulaEditorDataFragmentListTest extends BaseActivityInstrumentati
 		solo.waitForActivity(ScriptActivity.class.getSimpleName());
 		solo.clickOnView(solo.getView(R.id.button_play));
 		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(5000); //TODO
+		solo.sleep(500);
 		solo.goBack();
 		solo.waitForView(solo.getView(R.id.stage_dialog_button_back));
 		solo.clickOnView(solo.getView(R.id.stage_dialog_button_back));
@@ -182,7 +182,7 @@ public class FormulaEditorDataFragmentListTest extends BaseActivityInstrumentati
 		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
 		solo.clickOnView(solo.getView(R.id.button_play));
 		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(5000);//TODO
+		solo.sleep(500);
 		solo.goBack();
 		solo.waitForView(solo.getView(R.id.stage_dialog_button_back));
 		solo.clickOnView(solo.getView(R.id.stage_dialog_button_back));
@@ -211,7 +211,7 @@ public class FormulaEditorDataFragmentListTest extends BaseActivityInstrumentati
 
 		solo.clickOnView(solo.getView(R.id.button_play));
 		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(5000);//TODO
+		solo.sleep(500);
 		solo.goBack();
 		solo.waitForView(solo.getView(R.id.stage_dialog_button_back));
 		solo.clickOnView(solo.getView(R.id.stage_dialog_button_back));
