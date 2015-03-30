@@ -22,7 +22,14 @@
  */
 package org.catrobat.catroid.uitest.content.brick;
 
+import android.graphics.Rect;
+import android.support.test.espresso.DataInteraction;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import org.catrobat.catroid.ProjectManager;
@@ -37,14 +44,27 @@ import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfLogicElseBrick;
 import org.catrobat.catroid.content.bricks.IfLogicEndBrick;
 import org.catrobat.catroid.content.bricks.SetLookBrick;
-import org.catrobat.catroid.ui.BrickView;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.adapter.BrickAdapter;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
+import org.catrobat.catroid.uitest.util.EspressoUtils;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
+import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 	private static final String TAG = IfBrickTest.class.getSimpleName();
@@ -83,26 +103,30 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 	}
 
 	public void testStrings() {
-		solo.clickOnView(solo.getView(R.id.brick_if_begin_edit_text));
-		solo.sleep(100);
+		DataInteraction ifLogicBeginBrickDi = onData(isBrick(IfLogicBeginBrick.class));
+		ifLogicBeginBrickDi.perform(click());
 
-		boolean isFound = solo.searchText(solo.getString(R.string.brick_if_begin_second_part));
-		assertTrue("String: " + getActivity().getString(R.string.brick_if_begin_second_part) + " not found!", isFound);
-
-		isFound = solo.searchText(solo.getString(R.string.brick_if_begin));
-		assertTrue("String: " + getActivity().getString(R.string.brick_if_begin) + " not found!", isFound);
+		onView(withId(R.id.if_label)).check(matches(withText(R.string.brick_if_begin)));
+		onView(withId(R.id.if_label_second_part)).check(matches(withText(R.string.brick_if_begin_second_part)));
 	}
 
 	public void testIfBrickParts() {
 		int dragAndDropSteps = 100;
-		ArrayList<Integer> yPosition;
+
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		Log.d(TAG, "Before drag item 1 to item 4 + 20");
+
 		logBrickListForJenkins(projectBrickList);
 
-		yPosition = UiTestUtils.getListItemYPositions(solo, 0);
+//		CollectYPosOfListItemsAction collectYPosOfListItemsAction = new CollectYPosOfListItemsAction();
+//		onView(withId(android.R.id.list)).perform(collectYPosOfListItemsAction);
+		List<Integer> yPosition = UiTestUtils.getListItemYPositions(solo, 0);
+
+//		final List<Integer> yPosition = collectYPosOfListItemsAction.getYPositions();
 
 		int oldYto = yPosition.get(4) + 20;
+
+//		onData(isBrick(IfLogicBeginBrick.class)).perform(ViewActions.longClick());
 		UiTestUtils.longClickAndDrag(solo, 10, yPosition.get(1), 10, oldYto, dragAndDropSteps);
 
 		boolean result = solo.waitForLogMessage("longClickAndDrag finished: " + oldYto, 1000);
@@ -219,9 +243,13 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 	}
 
 	public void testCopyIfLogicBeginBrickActionMode() {
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy, getActivity());
-		solo.clickOnView(UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_begin_layout));
-		UiTestUtils.acceptAndCloseActionMode(solo);
+		//Open Copy ActionMode
+		EspressoUtils.openCopyActionMode(this);
+
+		onData(isBrick(IfLogicBeginBrick.class)).perform(click());
+
+		//Close ActionMode: Will Copy Selected Bricks.
+		EspressoUtils.acceptAndCloseActionMode();
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 7, projectBrickList.size());
@@ -235,9 +263,14 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 	}
 
 	public void testCopyIfLogicElseBrickActionMode() {
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy, getActivity());
-		solo.clickOnView(UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_else_layout));
-		UiTestUtils.acceptAndCloseActionMode(solo);
+
+		EspressoUtils.openCopyActionMode(this);
+
+		onData(isBrick(IfLogicBeginBrick.class)).perform(click());
+
+		//Close ActionMode: Will Copy Selected Bricks.
+		EspressoUtils.acceptAndCloseActionMode();
+
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 7, projectBrickList.size());
@@ -250,10 +283,18 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 		assertTrue("Wrong Brick instance.", projectBrickList.get(6) instanceof IfLogicEndBrick);
 	}
 
+	private Matcher<Object> isBrick(Class<? extends Brick> clazz) {
+		return is(instanceOf(clazz));
+	}
+
 	public void testCopyIfLogicEndBrickActionMode() {
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy, getActivity());
-		solo.clickOnView(UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_end_if_layout));
-		UiTestUtils.acceptAndCloseActionMode(solo);
+		//Open Copy ActionMode
+		EspressoUtils.openCopyActionMode(this);
+
+		onData(isBrick(IfLogicEndBrick.class)).perform(click());
+
+		//Close ActionMode: Will Copy Selected Bricks.
+		EspressoUtils.acceptAndCloseActionMode();
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 7, projectBrickList.size());
@@ -268,68 +309,83 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 
 	public void testSelectionAfterCopyActionMode() {
 
-		BrickView firstIfLogicBeginBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_begin_layout, 0);
-		BrickView firstIfLogicElseBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_else_layout, 0);
-		BrickView firstIfLogicEndBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_end_if_layout, 0);
-
-		assertNotNull("firstIfLogicBeginBrickView not present", firstIfLogicBeginBrickView);
-		assertNotNull("firstIfLogicElseBrickView not present", firstIfLogicElseBrickView);
-		assertNotNull("firstIfLogicEndBrickView not present", firstIfLogicEndBrickView);
+		onData(is(instanceOf(IfLogicBeginBrick.class))).check(matches(isNotChecked()));
+		onData(isBrick(IfLogicBeginBrick.class)).check(matches(isNotChecked()));
+		onData(is(instanceOf(IfLogicEndBrick.class))).check(matches(isNotChecked()));
 
 		//Do Test
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy, getActivity());
-		solo.clickOnView(firstIfLogicBeginBrickView);
+		//Open Copy ActionMode
+		EspressoUtils.openCopyActionMode(this);
 
-		UiTestUtils.acceptAndCloseActionMode(solo);
+		onData(isBrick(IfLogicBeginBrick.class)).perform(click());
 
-		BrickView secondIfLogicBeginBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_begin_layout, 1);
-		BrickView secondIfLogicElseBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_else_layout, 1);
-		BrickView secondIfLogicEndBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_end_if_layout, 1);
-		assertNotNull("secondIfLogicBeginBrickView not present", secondIfLogicBeginBrickView);
-		assertNotNull("secondIfLogicElseBrickView not present", secondIfLogicElseBrickView);
-		assertNotNull("secondIfLogicEndBrickView not present", secondIfLogicEndBrickView);
+		//Close ActionMode: Will Copy Selected Bricks.
+		EspressoUtils.acceptAndCloseActionMode();
 
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.delete), R.id.delete, getActivity());
-		solo.clickOnView(secondIfLogicEndBrickView);
+		onData(isBrick(IfLogicBeginBrick.class)).atPosition(1).check(matches(isNotChecked()));
+		onData(isBrick(IfLogicElseBrick.class)).atPosition(1).check(matches(isNotChecked()));
+		onData(isBrick(IfLogicEndBrick.class)).atPosition(1).check(matches(isNotChecked()));
 
-		assertFalse("CheckBox is checked but shouldn't be.", firstIfLogicBeginBrickView.isChecked());
-		assertTrue("CheckBox is not checked but should be.", secondIfLogicBeginBrickView.isChecked());
-		assertFalse("CheckBox is checked but shouldn't be.", firstIfLogicElseBrickView.isChecked());
-		assertTrue("CheckBox is not checked but should be.", secondIfLogicElseBrickView.isChecked());
-		assertFalse("CheckBox is checked but shouldn't be.", firstIfLogicEndBrickView.isChecked());
-		assertTrue("CheckBox is not checked but should be.", secondIfLogicEndBrickView.isChecked());
+		//Open Delete ActionMode (It is not in Overflow menu)
+		onView(withId(R.id.delete)).perform(click());
+
+		//Click to checked Second If Bricks
+		onData(is(instanceOf(IfLogicBeginBrick.class))).atPosition(1).perform(click());
+
+		// Should be not checked!
+		onData(is(instanceOf(IfLogicBeginBrick.class))).atPosition(0).check(matches(isNotChecked()));
+		onData(isBrick(IfLogicBeginBrick.class)).atPosition(0).check(matches(isNotChecked()));
+		onData(is(instanceOf(IfLogicEndBrick.class))).atPosition(0).check(matches(isNotChecked()));
+
+		// Should be checked!
+		onData(is(instanceOf(IfLogicBeginBrick.class))).atPosition(1).check(matches(isChecked()));
+		onData(isBrick(IfLogicBeginBrick.class)).atPosition(1).check(matches(isChecked()));
+		onData(is(instanceOf(IfLogicEndBrick.class))).atPosition(1).check(matches(isChecked()));
+
 	}
 
 	public void testSelectionActionMode() {
 
-		// Prepare test
-		BrickView ifLogicBeginBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_begin_layout);
-		BrickView ifLogicElseBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_else_layout);
-		BrickView ifLogicEndBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_if_end_if_layout);
-		BrickView changeYByNBrickView = UiTestUtils.getBrickViewByLayoutId(solo, R.id.brick_change_y_layout);
+		onData(isBrick(IfLogicBeginBrick.class)).check(matches(isNotChecked()));
+		onData(isBrick(IfLogicBeginBrick.class)).check(matches(isNotChecked()));
+		onData(isBrick(IfLogicEndBrick.class)).check(matches(isNotChecked()));
 
-		assertNotNull("ifLogicBeginBrickView not present", ifLogicBeginBrickView);
-		assertNotNull("ifLogicElseBrickView not present", ifLogicElseBrickView);
-		assertNotNull("ifLogicEndBrickView not present", ifLogicEndBrickView);
-		assertNotNull("changeYByNBrickView not present", changeYByNBrickView);
+		onData(is(instanceOf(ChangeYByNBrick.class))).check(matches(isNotChecked()));
 
 		// Do Test 1
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy, getActivity());
-		UiTestUtils.clickOnView(solo, ifLogicBeginBrickView);
-		assertTrue("CheckBox is not checked but should be.", ifLogicBeginBrickView.isChecked()
-				&& ifLogicElseBrickView.isChecked() && ifLogicEndBrickView.isChecked());
-		assertFalse("CheckBox is checked but shouldn't be.", changeYByNBrickView.isChecked());
+		//Open Copy ActionMode
+		EspressoUtils.openCopyActionMode(this);
 
-		UiTestUtils.acceptAndCloseActionMode(solo);
+		//Click to select All If Bricks
+		onData(isBrick(IfLogicBeginBrick.class)).perform(click());
+
+		onData(isBrick(IfLogicBeginBrick.class)).check(matches(isChecked()));
+		onData(isBrick(IfLogicBeginBrick.class)).check(matches(isChecked()));
+		onData(isBrick(IfLogicEndBrick.class)).check(matches(isChecked()));
+		onData(isBrick(ChangeYByNBrick.class)).check(matches(isNotChecked()));
+
+		//Close ActionMode: Will Copy Selected Bricks.
+		EspressoUtils.acceptAndCloseActionMode();
 
 		// Do Test 2
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.delete), R.id.delete, getActivity());
-		UiTestUtils.clickOnView(solo, ifLogicBeginBrickView);
+		//Open Delete ActionMode (It is not in Overflow menu)
 
-		assertTrue("CheckBox is not checked but should be.", ifLogicBeginBrickView.isChecked()
-				&& ifLogicElseBrickView.isChecked() && ifLogicEndBrickView.isChecked());
-		assertFalse("CheckBox is checked but shouldn't be.", changeYByNBrickView.isChecked());
+		//Open Copy ActionMode
+		EspressoUtils.openDeleteActionMode();
+
+		//Click to checked First If Bricks
+		onData(is(instanceOf(IfLogicBeginBrick.class))).atPosition(0).perform(click());
+
+		//Assert First If Bricks are checked
+		onData(is(instanceOf(IfLogicBeginBrick.class))).atPosition(0).check(matches(isChecked()));
+		onData(isBrick(IfLogicBeginBrick.class)).atPosition(0).check(matches(isChecked()));
+		onData(is(instanceOf(IfLogicEndBrick.class))).atPosition(0/*2 IfLogicBeginBrick are present now in List View*/).check(matches(isChecked()));
+
+		//Assert ChangeYByNBrick is not are checked
+		onData(is(instanceOf(ChangeYByNBrick.class))).check(matches(isNotChecked()));
+
 	}
+
 
 	private void logBrickListForJenkins(ArrayList<Brick> projectBrickList) {
 		for (Brick brick : projectBrickList) {
@@ -370,6 +426,44 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 		solo.clickOnText(solo.getString(R.string.yes));
 		if (!solo.waitForView(ListView.class, 0, 5000)) {
 			fail("Dialog does not close in 5 sec!");
+		}
+	}
+
+	private static class CollectYPosOfListItemsAction implements ViewAction {
+		private final List<Integer> yPositionList = new ArrayList<Integer>();
+
+		public CollectYPosOfListItemsAction() {
+		}
+
+		@Override
+		public Matcher<View> getConstraints() {
+			return allOf(new Matcher[]{ViewMatchers.isAssignableFrom(AbsListView.class), ViewMatchers.isDisplayed()});
+		}
+
+		@Override
+		public String getDescription() {
+			return "get y-Pos of List Items";
+		}
+
+		@Override
+		public void perform(UiController uiController, View view) {
+
+			if (view instanceof AbsListView) {
+				AbsListView lv = (AbsListView) view;
+				for (int i = 0; i < lv.getChildCount(); ++i) {
+					View currentViewInList = lv.getChildAt(i);
+					Rect globalVisibleRectangle = new Rect();
+					currentViewInList.getGlobalVisibleRect(globalVisibleRectangle);
+					int middleYPosition = globalVisibleRectangle.top + globalVisibleRectangle.height() / 2;
+					yPositionList.add(middleYPosition);
+				}
+
+			}
+
+		}
+
+		public List<Integer> getYPositions() {
+			return yPositionList;
 		}
 	}
 }
