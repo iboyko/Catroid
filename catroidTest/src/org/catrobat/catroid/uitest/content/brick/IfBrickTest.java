@@ -22,15 +22,14 @@
  */
 package org.catrobat.catroid.uitest.content.brick;
 
-import android.graphics.Rect;
 import android.support.test.espresso.DataInteraction;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.common.base.Objects;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
@@ -40,15 +39,19 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.ChangeYByNBrick;
+import org.catrobat.catroid.content.bricks.FormulaBrick;
 import org.catrobat.catroid.content.bricks.IfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.IfLogicElseBrick;
 import org.catrobat.catroid.content.bricks.IfLogicEndBrick;
 import org.catrobat.catroid.content.bricks.SetLookBrick;
+import org.catrobat.catroid.formulaeditor.Formula;
+import org.catrobat.catroid.formulaeditor.InterpretationException;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.adapter.BrickAdapter;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.EspressoUtils;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
@@ -61,6 +64,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -82,6 +86,106 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
 	}
 
+	/**
+	 * For bricks using the FormulaEditor. Tests starting the FE, entering a new number/formula and
+	 * ensures its set correctly to the brick´s edit text field
+	 */
+	public static void testBrickWithFormulaEditor(Sprite sprite, int editTextId, final double newValue,
+			Brick.BrickField brickField, FormulaBrick theBrick) {
+
+//		solo.clickOnView(solo.getView(editTextId));
+		onView(withId(editTextId)).perform(click());
+		insertDoubleIntoEditText(newValue);
+		onView(withId(R.id.formula_editor_edit_field)).check(matches(withAsDoubleValue(newValue)));
+//		assertEquals(
+//				"Text not updated within FormulaEditor",
+//				newValue,
+//				Double.parseDouble(((EditText) solo.getView(R.id.formula_editor_edit_field)).getText().toString()
+//						.replace(',', '.')));
+		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
+//		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
+//		solo.sleep(200);
+
+		Formula formula = theBrick.getFormulaWithBrickField(brickField);
+		try {
+			assertEquals("Wrong text in field", newValue, formula.interpretDouble(sprite), 0.01f);
+		} catch (InterpretationException interpretationException) {
+			fail("Wrong text in field.");
+		}
+
+//		assertEquals("Text not updated in the brick list", newValue,
+//				Double.parseDouble(((TextView) solo.getView(editTextId)).getText().toString().replace(',', '.')), 0.01f);
+		onView(allOf(withId(editTextId), withParent(/*layout*/withParent(/*view*/withParent(withId(android.R.id.list)))))).check(matches(withAsDoubleValue(newValue)));
+	}
+
+	private static BoundedMatcher<View, TextView> withAsDoubleValue(final double newValue) {
+		return new BoundedMatcher<View, TextView>(TextView.class) {
+			@Override
+			protected boolean matchesSafely(TextView textView) {
+				return Objects.equal(newValue, Double.parseDouble(textView.getText().toString().replace(',', '.')));
+			}
+
+			@Override
+			public void describeTo(Description description) {
+				description.appendText("with double: ").appendValue(newValue);
+			}
+		};
+	}
+
+	/**
+	 * Clicks on the EditText given by editTextId, inserts the double value and closes the Dialog
+	 *
+	 * @param value The value you want to put into the EditText
+	 */
+	public static void insertDoubleIntoEditText(double value) {
+		insertValue(value + "");
+	}
+
+	private static void insertValue(String value) {
+
+		for (char item : (value.toCharArray())) {
+			switch (item) {
+				case '-':
+					onView(withId(R.id.formula_editor_keyboard_minus)).perform(click());
+					break;
+				case '0':
+					onView(withId(R.id.formula_editor_keyboard_0)).perform(click());
+					break;
+				case '1':
+					onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+					break;
+				case '2':
+					onView(withId(R.id.formula_editor_keyboard_2)).perform(click());
+					break;
+				case '3':
+					onView(withId(R.id.formula_editor_keyboard_3)).perform(click());
+					break;
+				case '4':
+					onView(withId(R.id.formula_editor_keyboard_4)).perform(click());
+					break;
+				case '5':
+					onView(withId(R.id.formula_editor_keyboard_5)).perform(click());
+					break;
+				case '6':
+					onView(withId(R.id.formula_editor_keyboard_6)).perform(click());
+					break;
+				case '7':
+					onView(withId(R.id.formula_editor_keyboard_7)).perform(click());
+					break;
+				case '8':
+					onView(withId(R.id.formula_editor_keyboard_8)).perform(click());
+					break;
+				case '9':
+					onView(withId(R.id.formula_editor_keyboard_9)).perform(click());
+					break;
+				case '.':
+				case ',':
+					onView(withId(R.id.formula_editor_keyboard_decimal_mark)).perform(click());
+			}
+		}
+	}
+
+
 	public void testIfBrick() {
 		ListView view = UiTestUtils.getScriptListView(solo);
 		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
@@ -89,7 +193,7 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 
 		int childrenCount = adapter.getChildCountFromLastGroup();
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+		testBrickWithFormulaEditor(ProjectManager.getInstance().getCurrentSprite(),
 				R.id.brick_if_begin_edit_text, 5, Brick.BrickField.IF_CONDITION, ifBrick);
 
 		assertEquals("Incorrect number of bricks.", 6, dragDropListView.getChildCount()); // don't forget the footer
@@ -429,41 +533,41 @@ public class IfBrickTest extends BaseActivityInstrumentationTestCase<MainMenuAct
 		}
 	}
 
-	private static class CollectYPosOfListItemsAction implements ViewAction {
-		private final List<Integer> yPositionList = new ArrayList<Integer>();
-
-		public CollectYPosOfListItemsAction() {
-		}
-
-		@Override
-		public Matcher<View> getConstraints() {
-			return allOf(new Matcher[]{ViewMatchers.isAssignableFrom(AbsListView.class), ViewMatchers.isDisplayed()});
-		}
-
-		@Override
-		public String getDescription() {
-			return "get y-Pos of List Items";
-		}
-
-		@Override
-		public void perform(UiController uiController, View view) {
-
-			if (view instanceof AbsListView) {
-				AbsListView lv = (AbsListView) view;
-				for (int i = 0; i < lv.getChildCount(); ++i) {
-					View currentViewInList = lv.getChildAt(i);
-					Rect globalVisibleRectangle = new Rect();
-					currentViewInList.getGlobalVisibleRect(globalVisibleRectangle);
-					int middleYPosition = globalVisibleRectangle.top + globalVisibleRectangle.height() / 2;
-					yPositionList.add(middleYPosition);
-				}
-
-			}
-
-		}
-
-		public List<Integer> getYPositions() {
-			return yPositionList;
-		}
-	}
+//	private static class CollectYPosOfListItemsAction implements ViewAction {
+//		private final List<Integer> yPositionList = new ArrayList<Integer>();
+//
+//		public CollectYPosOfListItemsAction() {
+//		}
+//
+//		@Override
+//		public Matcher<View> getConstraints() {
+//			return allOf(new Matcher[]{ViewMatchers.isAssignableFrom(AbsListView.class), ViewMatchers.isDisplayed()});
+//		}
+//
+//		@Override
+//		public String getDescription() {
+//			return "get y-Pos of List Items";
+//		}
+//
+//		@Override
+//		public void perform(UiController uiController, View view) {
+//
+//			if (view instanceof AbsListView) {
+//				AbsListView lv = (AbsListView) view;
+//				for (int i = 0; i < lv.getChildCount(); ++i) {
+//					View currentViewInList = lv.getChildAt(i);
+//					Rect globalVisibleRectangle = new Rect();
+//					currentViewInList.getGlobalVisibleRect(globalVisibleRectangle);
+//					int middleYPosition = globalVisibleRectangle.top + globalVisibleRectangle.height() / 2;
+//					yPositionList.add(middleYPosition);
+//				}
+//
+//			}
+//
+//		}
+//
+//		public List<Integer> getYPositions() {
+//			return yPositionList;
+//		}
+//	}
 }

@@ -29,7 +29,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.InstrumentationTestCase;
 
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.uitest.content.brick.IfBrickECupTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -37,6 +36,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
+ * Espresso Utils.
  * Created by illya on 29/03/15.
  */
 public class EspressoUtils {
@@ -52,7 +52,6 @@ public class EspressoUtils {
 	public static void acceptAndCloseActionMode() {
 		onView(withId(getActionModeCloseBtnId())).perform(click());
 	}
-
 
 
 	private static int getActionModeCloseBtnId() {
